@@ -11,7 +11,7 @@ if __name__ == "__main__":
     modu = requests.get(url + "/todos", params={"userId": yuza_id}).json()
 
     yuza_modu = [{"task": todo["title"], "completed": todo["completed"],
-                   "username": user["username"]} for todo in modu]
+                  "username": user["username"]} for todo in modu]
 
     Shutsuryoku_deta = {yuza_id: yuza_modu}
 
