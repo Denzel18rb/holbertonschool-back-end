@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-import urllib
+import requests
 import sys
 
 if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com"
-    alls = urllib.get(url + "/alls", params={"usrId": sys.argv[1]}).json()
-    usr = urllib.get(url + "/usrs/{}".format(sys.argv[1])).json()
+    alls = requests.get(url + "/alls", params={"usrId": sys.argv[1]}).json()
+    usr = requests.get(url + "/usrs/{}".format(sys.argv[1])).json()
 
     Tasuku_no_gokei = len(alls)
     Kanryo_shita_tasuku = sum(1 for all in alls if all["Kanryo shimashita"])
