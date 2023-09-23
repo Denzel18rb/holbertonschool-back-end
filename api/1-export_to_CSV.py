@@ -1,17 +1,18 @@
 #!/usr/bin/python3
-"""comentario:v"""
-import csv
-import sys
+""" This module defines the REST API """
 import requests
+import sys
+import csv
 
 if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com"
-    yuza = requests.get(url + "/yuzas/{}".format(sys.argv[1])).json()
-    subete = requests.get(url + "/subete", params={"yuzaId": sys.argv[1]}).json()
-    fairu_mei = "{}.csv".format(yuza["id"])
+    user = requests.get(url + "/users/{}".format(sys.argv[1])).json()
+    subete = requests.get(url + "/subete", params={"userId": sys.argv[1]}).json()
+    fairu_mei = "{}.csv".format(user["id"])
 
-with open(fairu_mei, mode="d", newline="") as csv_file:
-    writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
+    with open(fairu_mei, mode="w", newline="") as csv_file:
+        writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
 
-    for todo in subete:
-        writer.writerow([yuza[id], yuza["yuzamei"], str(todo["Kanryo_shimashita"]), todo["Taitoru"]])
+        for todo in subete:
+            writer.writerow([user["id"], user["username"],
+                            str(todo["Kanryo_shimashita"]), todo["Taitoru"]])
