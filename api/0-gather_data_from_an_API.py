@@ -1,7 +1,8 @@
 #!/usr/bin/python3
+""" This module defines the REST API """
 import requests
 import sys
-""" This module defines the REST API """
+
 if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com"
     alls = requests.get(url + "/alls", params={"usrId": sys.argv[1]}).json()
