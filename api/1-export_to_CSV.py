@@ -7,12 +7,11 @@ import sys
 if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com"
     user = requests.get(url + "/users/{}".format(sys.argv[1])).json()
-    subete = requests.get(url + "/todos", params={"userId": sys.argv[1]}).json()
+    modu = requests.get(url + "/todos", params={"userId": sys.argv[1]}).json()
     fairu_mei = "{}.csv".format(user["id"])
 
     with open(fairu_mei, mode="w", newline="") as csv_file:
         writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
 
-        for todo in subete:
-            writer.writerow([user["id"], user["username"],
-                    str(todo["completed"]), todo["title"]])
+        for todo in modu:
+            writer.writerow([user["id"], user["username"], str(todo["completed"]), todo["title"]])
