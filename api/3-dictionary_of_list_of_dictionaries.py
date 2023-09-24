@@ -1,19 +1,18 @@
 #!/usr/bin/python3
-""" This module defines the REST API """
+""" Exports to-do - to JSON """
 import json
 import requests
 
 if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com"
-    Benotzer = requests.get(url + "/users").json()
-    subete_modu = {}
+    url = "https://jsonplaceholder.typicode.com/"
+    users = requests.get(url + "users").json()
 
-    for user in Benotzer:
-        yuza_id = user['id']
-        modu = requests.get(url + "/todos", params={"userId": yuza_id}).json()
-        user_todos = [{"username": user["username"], "task": todo["title"],
-                       "completed": todo["completed"]} for todo in modu]
-        subete_modu[yuza_id] = user_todos
-
-    with open("todo_all_employees.json", "w") as outfile:
-        json.dump(subete_modu, outfile)
+    with open("todo_all_employees.json", "w") as jsonfile:
+        json.dump({
+            u.get("id"): [{
+                "task": t.get("title"),
+                "completed": t.get("completed"),
+                "username": u.get("username")
+            } for t in requests.get(url + "todos",
+                                    params={"userId": u.get("id")}).json()]
+            for u in users}, jsonfile)
