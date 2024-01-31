@@ -1,19 +1,39 @@
 #!/usr/bin/python3
-""" This module defines the REST API """
+"""Python script that using REST API and export json"""
 import json
 import requests
 
 if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com"
-    users = requests.get(url + "/users").json()
-    all_todos = {}
+    todo_url = f"https://jsonplaceholder.typicode.com/todos"
+    user_url = f"https://jsonplaceholder.typicode.com/users"
 
-    for user in users:
-        user_id = user['id']
-        todos = requests.get(url + "/todos", params={"userId": user_id}).json()
-        user_todos = [{"username": user["username"], "task": todo["title"],
-                       "completed": todo["completed"]} for todo in todos]
-        all_todos[user_id] = user_todos
+    response1 = requests.get(todo_url).json()
+    response2 = requests.get(user_url).json()
 
-    with open("todo_all_employees.json", "w") as outfile:
-        json.dump(all_todos, outfile)
+    number_tasks_done = sum(1 for task in response1 if task["completed"])
+    total_tasks = len(response1)
+
+    employee_data = {}
+
+    for user in response2:
+        user_id = user["id"]
+        employee_username = user["username"]
+        employee_status = [task["completed"] for task in response1
+                           if task["userId"] == user_id]
+        task_titles = [task["title"] for task in response1
+                       if task["userId"] == user_id]
+
+        employee_data[user_id] = [
+                {
+                    "username": employee_username,
+                    "task": title,
+                    "completed": status
+                }
+                for title, status in zip(task_titles, employee_status)
+            ]
+
+    filename_json = "todo_all_employees.json"
+
+    with open(filename_json, mode="w") as json_file:
+        json.dump(employee_data, json_file)
+
